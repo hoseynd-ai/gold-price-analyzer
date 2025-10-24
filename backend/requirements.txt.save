@@ -1,0 +1,64 @@
+# Gold Price Analyzer - Backend Dependencies
+# Author: Hoseyn Doulabi (@hoseynd-ai)
+# Created: 2025-10-24
+
+# FastAPI & Web Framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+python-multipart==0.0.6
+
+# Pydantic & Validation
+pydantic==2.5.0
+pydantic-settings==2.1.0
+email-validator==2.1.0
+
+# Database
+sqlalchemy==2.0.23
+asyncpg==0.29.0
+psycopg2-binary==2.9.9
+alembic==1.12.1
+
+# Redis & Cache
+redis==5.0.1
+hiredis==2.2.3
+
+# Data Processing
+pandas==2.1.3
+numpy==1.26.2
+
+# Data Collection (Free APIs)
+yfinance==0.2.32
+fredapi==0.5.1
+newsapi-python==0.2.7
+feedparser==6.0.10
+beautifulsoup4==4.12.2
+requests==2.31.0
+
+# Configuration
+python-dotenv==1.0.0
+
+# Logging
+structlog==23.2.0
+
+# Security
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+
+# HTTP Client
+httpx==0.25.1
+aiohttp==3.9.1
+
+# Utilities
+python-dateutil==2.8.2
+pytz==2023.3
+
+# Testing
+pytest==7.4.3
+pytest-asyncio==0.21.1
+pytest-cov==4.1.0
+httpx==0.25.1
+
+# Code Quality
+black==23.11.0
+flake8==6.1.0
+isort==5.12.0
