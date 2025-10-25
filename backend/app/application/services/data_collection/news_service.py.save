@@ -1,0 +1,248 @@
+        'gold', 'precious metal', 'bullion', 'xau',
+        'gold price', 'gold market', 'gold trading',
+        'federal reserve', 'inflation', 'interest rate',
+    ]
+    
+    def __init__(self):
+        """Initialize News Service."""
+        logger.info("news_service_initialized", feeds=len(self.RSS_FEEDS))
+    
+    def fetch_rss_feed(self, feed_url: str) -> Optional[feedparser.FeedParserDict]:
+        """
+        Fetch RSS feed.
+        
+        Args:
+            feed_url: RSS feed URL
+            
+        Returns:
+            Parsed feed or None
+        """
+        try:
+            logger.info("fetching_rss_feed", url=feed_url)
+            
+            # Set user agent to avoid blocking
+            headers = {
+                'User-Agent': 'Gold Price Analyzer/1.0 (https://github.com/hoseynd-ai/gold-price-analyzer)'
+            }
+            
+            response = requests.get(feed_url, headers=headers, timeout=10)
+            
+            if response.status_code == 200:
+                feed = feedparser.parse(response.content)
+                
+                logger.info("rss_feed_fetched", 
+                           url=feed_url, 
+                           entries=len(feed.entries))
+                
+                return feed
+            else:
+                logger.warning("rss_fetch_failed", 
+                              url=feed_url, 
+                              status=response.status_code)
+                return None
+                
+        except Exception as e:
+            logger.error("rss_fetch_error", url=feed_url, error=str(e))
+            return None
+    
+    def is_gold_related(self, title: str, summary: str) -> bool:
+        """
+        Check if article is gold-related.
+        
+        Args:
+            title: Article title
+            summary: Article summary
+            
+        Returns:
+            True if gold-related
+        """
+        text = f"{title} {summary}".lower()
+        
+        for keyword in self.GOLD_KEYWORDS:
+            if keyword.lower() in text:
+                return True
+        
+        return False
+    
+    def parse_feed_entry(self, entry: Any, source: str) -> Dict[str, Any]:
+        """
+        Parse RSS feed entry to article format.
+        
+        Args:
+            entry: Feed entry
+            source: Source name
+            
+        Returns:
+            Article data dict
+        """
+        try:
+            # Parse published date
+            published = entry.get('published_parsed') or entry.get('updated_parsed')
+            if published:
+                pub_date = datetime(*published[:6], tzinfo=UTC)
+            else:
+                pub_date = datetime.now(UTC)
+            
+            # Extract data
+            article = {
+                'title': entry.get('title', 'No Title'),
+                'summary': entry.get('summary', entry.get('description', '')),
+                'url': entry.get('link', ''),
+                'published_at': pub_date,
+                'source': source,
+                'author': entry.get('author', 'Unknown'),
+                'category': self.RSS_FEEDS[source]['category'],
+            }
+            
+            return article
+            
+        except Exception as e:
+            logger.error("parse_entry_error", source=source, error=str(e))
+            return {}
+    
+    async def fetch_and_save_news(self, hours_back: int = 24, 
+                                  filter_gold: bool = True) -> int:
+        """
+        Fetch news from all sources and save to database.
+        
+        Args:
+            hours_back: How many hours back to fetch
+            filter_gold: Only save gold-related articles
+            
+        Returns:
+            Number of articles saved
+        """
+        logger.info("fetching_news", hours_back=hours_back, filter_gold=filter_gold)
+        
+        cutoff_time = datetime.now(UTC) - timedelta(hours=hours_back)
+        saved_count = 0
+        
+        for source_key, source_info in self.RSS_FEEDS.items():
+            try:
+                # Fetch feed
+                feed = self.fetch_rss_feed(source_info['url'])
+                
+                if not feed or not feed.entries:
+                    logger.warning("no_entries", source=source_key)
+                    continue
+                
+                # Process entries
+                async with AsyncSessionLocal() as session:
+                    for entry in feed.entries:
+                        try:
+                            # Parse entry
+                            article_data = self.parse_feed_entry(entry, source_key)
+                            
+                            if not article_data:
+                                continue
+                            
+                            # Skip old articles
+                            if article_data['published_at'] < cutoff_time:
+                                logger.debug("article_too_old", 
+                                           title=article_data['title'][:50])
+                                continue
+                            
+                            # Filter gold-related
+                            if filter_gold:
+                                if not self.is_gold_related(
+                                    article_data['title'], 
+                                    article_data['summary']
+                                ):
+                                    logger.debug("not_gold_related", 
+                                               title=article_data['title'][:50])
+                                    continue
+                            
+                            # Check if exists
+                            from sqlalchemy import select
+                            result = await session.execute(
+                                select(NewsArticle).where(
+                                    NewsArticle.url == article_data['url']
+                                )
+                            )
+                            
+                            if result.scalar_one_or_none():
+                                logger.debug("article_exists", 
+                                           url=article_data['url'])
+                                continue
+                            
+                            # Save
+                            article = NewsArticle(**article_data)
+                            session.add(article)
+                            saved_count += 1
+                            
+                            logger.info("article_saved", 
+                                      title=article_data['title'][:50],
+                                      source=source_key)
+                            
+                        except Exception as e:
+                            logger.error("process_entry_error", 
+                                       source=source_key, 
+                                       error=str(e))
+                            continue
+                    
+                    await session.commit()
+                
+            except Exception as e:
+                logger.error("fetch_source_error", 
+                           source=source_key, 
+                           error=str(e))
+                continue
+        
+        logger.info("news_fetch_complete", saved=saved_count)
+        return saved_count
+    
+    async def get_latest_news(self, limit: int = 10) -> List[NewsArticle]:
+        """
+        Get latest news articles.
+        
+        Args:
+            limit: Number of articles to return
+            
+        Returns:
+            List of NewsArticle objects
+        """
+        async with AsyncSessionLocal() as session:
+            from sqlalchemy import select
+            
+            result = await session.execute(
+                select(NewsArticle)
+                .order_by(NewsArticle.published_at.desc())
+                .limit(limit)
+            )
+            
+            articles = result.scalars().all()
+            return articles
+    
+    def get_article_summary(self, url: str) -> Optional[str]:
+        """
+        Fetch full article content (optional).
+        
+        Args:
+            url: Article URL
+            
+        Returns:
+            Article text or None
+        """
+        try:
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (compatible; GoldAnalyzer/1.0)'
+            }
+            
+            response = requests.get(url, headers=headers, timeout=10)
+            
+            if response.status_code == 200:
+                soup = BeautifulSoup(response.content, 'html.parser')
+                
+                # Try to find article content
+                # This is very site-specific
+                article_body = soup.find('article') or soup.find('div', class_='content')
+                
+                if article_body:
+                    text = article_body.get_text(separator=' ', strip=True)
+                    return text[:1000]  # First 1000 chars
+            
+            return None
+            
+        except Exception as e:
+            logger.error("fetch_article_error", url=url, error=str(e))
+            return None
