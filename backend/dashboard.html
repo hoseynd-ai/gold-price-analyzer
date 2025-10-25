@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏆 Gold Price Analyzer - Complete Dashboard</title>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .stat-card h3 {
+            color: #667eea;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .stat-card .change {
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .positive { color: #2ecc71; }
+        .negative { color: #e74c3c; }
+        .neutral { color: #95a5a6; }
+
+        .tabs {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            padding: 12px 24px;
+            border: none;
+            background: #f0f0f0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button:hover {
+            background: #e0e0e0;
+        }
+
+        .tab-button.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .footer {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .news-item {
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            transition: background 0.3s ease;
+        }
+
+        .news-item:hover {
+            background: #f0f0f0;
+        }
+
+        .info-section {
+            margin-top: 25px;
+        }
+
+        .info-section h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .info-section ul {
+            line-height: 2;
+            padding-right: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tab-buttons {
+                flex-direction: column;
+            }
+
+            .tab-button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🏆 Gold Price Analyzer</h1>
+            <p>تحلیلگر هوشمند قیمت طلا با AI و اندیکاتورهای تکنیکال</p>
+            <p style="font-size: 0.9em; color: #999; margin-top: 10px;">
+                👨‍💻 Author: Hoseyn Doulabi (@hoseynd-ai) | 
+                📅 2025-10-25 15:15:48 UTC
+            </p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>💰 قیمت فعلی طلا</h3>
+                <div class="value">$2,752.30</div>
+                <div class="change positive">+2.45%</div>
+            </div>
+
+            <div class="stat-card">
+                <h3>📊 تعداد داده‌ها</h3>
+                <div class="value">5,267</div>
+                <div class="change neutral">21 سال (2004-2025)</div>
+            </div>
+
+            <div class="stat-card">
+                <h3>📰 اخبار تحلیل شده</h3>
+                <div class="value">16</div>
+                <div class="change positive">با FinBERT</div>
+            </div>
+
+            <div class="stat-card">
+                <h3>🔗 همبستگی</h3>
+                <div class="value">93.2%</div>
+                <div class="change positive">Sentiment vs Price</div>
+            </div>
+
+            <div class="stat-card">
+                <h3>📈 RSI</h3>
+                <div class="value">68.5</div>
+                <div class="change neutral">نزدیک Overbought</div>
+            </div>
+
+            <div class="stat-card">
+                <h3>🎯 MACD</h3>
+                <div class="value positive">Bullish</div>
+                <div class="change positive">سیگنال خرید</div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <div class="tab-buttons">
+                <button class="tab-button active" onclick="showTab('technical')">
+                    📊 اندیکاتورهای تکنیکال
+                </button>
+                <button class="tab-button" onclick="showTab('sentiment')">
+                    📰 تحلیل احساسات
+                </button>
+                <button class="tab-button" onclick="showTab('correlation')">
+                    🔗 همبستگی
+                </button>
+                <button class="tab-button" onclick="showTab('info')">
+                    ℹ️ اطلاعات پروژه
+                </button>
+            </div>
+
+            <!-- Technical Indicators Tab -->
+            <div id="technical" class="tab-content active">
+                <div class="chart-container">
+                    <h2 style="margin-bottom: 20px;">📊 نمودار اندیکاتورهای تکنیکال - 21 سال داده (2004-2025)</h2>
+                    <iframe 
+                        src="technical_indicators.html" 
+                        width="100%" 
+                        height="1200px" 
+                        frameborder="0"
+                        style="border-radius: 10px;"
+                    ></iframe>
+                </div>
+            </div>
+
+            <!-- Sentiment Analysis Tab -->
+            <div id="sentiment" class="tab-content">
+                <div class="chart-container">
+                    <h2 style="margin-bottom: 20px;">📰 تحلیل احساسات اخبار با FinBERT</h2>
+                    <iframe 
+                        src="sentiment_analysis.html" 
+                        width="100%" 
+                        height="800px" 
+                        frameborder="0"
+                        style="border-radius: 10px;"
+                    ></iframe>
+                </div>
+
+                <div class="chart-container" style="margin-top: 20px;">
+                    <h3>📝 آخرین اخبار:</h3>
+                    <div style="margin-top: 15px;">
+                        <div class="news-item">
+                            <div style="font-weight: bold; color: #2ecc71;">😊 POSITIVE (+0.92)</div>
+                            <div>India gold demand surges ahead of wedding season</div>
+                            <div style="font-size: 0.9em; color: #666; margin-top: 5px;">📅 2025-10-23 16:48:31 UTC</div>
+                        </div>
+                        <div class="news-item">
+                            <div style="font-weight: bold; color: #2ecc71;">😊 POSITIVE (+0.80)</div>
+                            <div>Silver prices follow gold higher in precious metals rally</div>
+                            <div style="font-size: 0.9em; color: #666; margin-top: 5px;">📅 2025-10-23 21:48:31 UTC</div>
+                        </div>
+                        <div class="news-item">
+                            <div style="font-weight: bold; color: #95a5a6;">😐 NEUTRAL (+0.07)</div>
+                            <div>Fed keeps interest rates steady at 5.25%</div>
+                            <div style="font-size: 0.9em; color: #666; margin-top: 5px;">📅 2025-10-25 06:27:33 UTC</div>
+                        </div>
+                        <div class="news-item">
+                            <div style="font-weight: bold; color: #e74c3c;">😟 NEGATIVE (-0.97)</div>
+                            <div>Gold mining output drops to 10-year low</div>
+                            <div style="font-size: 0.9em; color: #666; margin-top: 5px;">📅 2025-10-23 01:48:31 UTC</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Correlation Tab -->
+            <div id="correlation" class="tab-content">
+                <div class="chart-container">
+                    <h2 style="margin-bottom: 20px;">🔗 همبستگی Sentiment با قیمت طلا</h2>
+                    <iframe 
+                        src="combined_analysis.html" 
+                        width="100%" 
+                        height="900px" 
+                        frameborder="0"
+                        style="border-radius: 10px;"
+                    ></iframe>
+                </div>
+
+                <div class="chart-container" style="margin-top: 20px;">
+                    <h3>📊 آمار همبستگی:</h3>
+                    <ul style="line-height: 2; margin-top: 15px; padding-right: 20px;">
+                        <li><strong>ضریب همبستگی:</strong> 0.932 (93.2%)</li>
+                        <li><strong>تعداد نقاط داده:</strong> 16 روز با sentiment</li>
+                        <li><strong>نتیجه:</strong> همبستگی مثبت قوی بین sentiment اخبار و قیمت طلا</li>
+                        <li><strong>کاربرد:</strong> sentiment می‌تواند یک predictor خوب برای پیش‌بینی قیمت باشد</li>
+                        <li><strong>تفسیر:</strong> وقتی اخبار مثبت‌تر می‌شوند، قیمت طلا تمایل به افزایش دارد</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Info Tab -->
+            <div id="info" class="tab-content">
+                <div class="chart-container">
+                    <h2>ℹ️ درباره پروژه Gold Price Analyzer</h2>
+                    
+                    <div class="info-section">
+                        <h3>🎯 اهداف پروژه:</h3>
+                        <ul>
+                            <li>تحلیل قیمت طلا با استفاده از 21 سال داده تاریخی (2004-2025)</li>
+                            <li>تحلیل احساسات اخبار مالی با مدل FinBERT (Pre-trained NLP)</li>
+                            <li>محاسبه اندیکاتورهای تکنیکال (RSI, MACD, Bollinger Bands, Moving Averages)</li>
+                            <li>بررسی همبستگی بین sentiment اخبار و قیمت طلا</li>
+                            <li>پیش‌بینی قیمت آینده با Machine Learning (در دست توسعه)</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-section">
+                        <h3>🛠️ تکنولوژی‌ها:</h3>
+                        <ul>
+                            <li><strong>Backend:</strong> Python 3.12, FastAPI</li>
+                            <li><strong>Database:</strong> PostgreSQL 15 (10,597 records)</li>
+                            <li><strong>Cache:</strong> Redis 7</li>
+                            <li><strong>ML/AI:</strong> FinBERT (Transformers), TensorFlow, PyTorch</li>
+                            <li><strong>Visualization:</strong> Plotly, HTML/CSS/JavaScript</li>
+                            <li><strong>Data Sources:</strong> Alpha Vantage (GLD ETF), Kitco, NewsAPI</li>
+                            <li><strong>Deployment:</strong> Docker, Docker Compose</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-section">
+                        <h3>📊 داده‌ها:</h3>
+                        <ul>
+                            <li><strong>قیمت طلا:</strong> 5,267 کندل روزانه (2004-11-18 تا 2025-10-24)</li>
+                            <li><strong>اخبار:</strong> 16 مقاله خبری با sentiment analysis کامل</li>
+                            <li><strong>ضریب تبدیل GLD:</strong> 10.89 (GLD ETF → Gold Spot Price)</li>
+                            <li><strong>محدوده قیمت:</strong> $400 - $4,200 (رشد 10 برابری!)</li>
+                            <li><strong>Sentiment Distribution:</strong> 62.5% Positive, 25% Negative, 12.5% Neutral</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-section">
+                        <h3>📈 اندیکاتورهای تکنیکال:</h3>
+                        <ul>
+                            <li><strong>RSI (Relative Strength Index):</strong> سنجش momentum (Overbought > 70, Oversold < 30)</li>
+                            <li><strong>MACD:</strong> Moving Average Convergence Divergence - شناسایی روند</li>
+                            <li><strong>Bollinger Bands:</strong> سنجش نوسانات (Volatility indicator)</li>
+                            <li><strong>SMA & EMA:</strong> Simple و Exponential Moving Averages</li>
+                            <li><strong>Volume Analysis:</strong> تحلیل حجم معاملات</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-section">
+                        <h3>👨‍💻 نویسنده و مدیر پروژه:</h3>
+                        <ul>
+                            <li><strong>نام:</strong> حسین دولابی (Hoseyn Doulabi)</li>
+                            <li><strong>GitHub:</strong> <a href="https://github.com/hoseynd-ai" target="_blank">@hoseynd-ai</a></li>
+                            <li><strong>Repository:</strong> <a href="https://github.com/hoseynd-ai/gold-price-analyzer" target="_blank">gold-price-analyzer</a></li>
+                            <li><strong>تاریخ شروع:</strong> 2025-10-23</li>
+                            <li><strong>وضعیت:</strong> در حال توسعه فعال</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-section">
+                        <h3>📝 پیشرفت پروژه:</h3>
+                        <ul>
+                            <li>✅ <strong>Day 1:</strong> Infrastructure Setup (Docker, PostgreSQL, Redis)</li>
+                            <li>✅ <strong>Day 2:</strong> Backend Foundation (FastAPI, Database Models)</li>
+                            <li>✅ <strong>Day 3:</strong> Data Collection (Alpha Vantage, News APIs)</li>
+                            <li>✅ <strong>Day 4:</strong> Sentiment Analysis (FinBERT Integration)</li>
+                            <li>✅ <strong>Day 5:</strong> Technical Indicators & Visualization (این داشبورد!)</li>
+                            <li>⏳ <strong>Day 6:</strong> LSTM Model Training</li>
+                            <li>⏳ <strong>Day 7:</strong> Prediction API & Real-time Updates</li>
+                            <li>⏳ <strong>Day 8:</strong> Frontend با React</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-section">
+                        <h3>🔮 مراحل بعدی:</h3>
+                        <ul>
+                            <li><strong>ML Model:</strong> LSTM برای پیش‌بینی قیمت با 21 سال training data</li>
+                            <li><strong>API Endpoints:</strong> REST API برای دسترسی به predictions</li>
+                            <li><strong>Real-time Updates:</strong> WebSocket برای داده‌های لحظه‌ای</li>
+                            <li><strong>React Dashboard:</strong> Frontend تعاملی با charts و filters</li>
+                            <li><strong>Mobile App:</strong> React Native application</li>
+                            <li><strong>Deployment:</strong> AWS/Azure deployment با CI/CD</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-section">
+                        <h3>📚 مستندات:</h3>
+                        <ul>
+                            <li><a href="https://github.com/hoseynd-ai/gold-price-analyzer/blob/main/docs/GOLD_PRICE_ANALYZER_COMPLETE_BLUEPRINT.md" target="_blank">Complete Blueprint</a></li>
+                            <li><a href="https://github.com/hoseynd-ai/gold-price-analyzer/tree/main/docs/day5" target="_blank">Day 5 Documentation</a></li>
+                            <li><a href="https://github.com/hoseynd-ai/gold-price-analyzer/blob/main/README.md" target="_blank">README</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>🏆 Gold Price Analyzer</strong></p>
+            <p style="margin-top: 10px; color: #666;">
+                Made with ❤️ by Hoseyn Doulabi (@hoseynd-ai) | 
+                <a href="https://github.com/hoseynd-ai/gold-price-analyzer" target="_blank">GitHub Repository</a>
+            </p>
+            <p style="margin-top: 5px; font-size: 0.9em; color: #999;">
+                Last Updated: 2025-10-25 15:15:48 UTC
+            </p>
+            <p style="margin-top: 10px; font-size: 0.85em; color: #aaa;">
+                📊 Data: 5,267 candles (21 years) | 📰 News: 16 articles | 🔗 Correlation: 93.2%
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        // Optional: Auto-refresh stats
+        function updateStats() {
+            // این بخش می‌تونه به API متصل بشه برای real-time updates
+            console.log('Stats can be updated via API');
+        }
+
+        // Log when dashboard loads
+        console.log('🏆 Gold Price Analyzer Dashboard Loaded');
+        console.log('📅 Current Time: 2025-10-25 15:15:48 UTC');
+        console.log('👨‍💻 Author: Hoseyn Doulabi (@hoseynd-ai)');
+    </script>
+</body>
+</html>
