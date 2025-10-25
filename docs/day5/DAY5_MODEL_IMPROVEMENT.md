@@ -720,3 +720,423 @@ NewsAPI: https://newsapi.org/
 4. ادامه دهید از جایی که training تمام شده
 
 **🚀 Model v2 is training... Please wait!**
+
+---
+
+## 📊 نمودار پیشرفت پروژه
+
+### 🗓️ Timeline کلی (30 Days Plan)
+
+```
+Days 1-3: Foundation ████████████████████ 100% ✅
+Days 4-5: ML/AI      ███████████████░░░░░  75% ⏳
+Days 6-8: API/Deploy ░░░░░░░░░░░░░░░░░░░░   0% 📅
+Days 9+:  Advanced   ░░░░░░░░░░░░░░░░░░░░   0% 📅
+```
+
+---
+
+### 📅 Day-by-Day Progress
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                    🏗️  PROJECT PROGRESS TRACKER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📅 Day 1 (2025-10-23): Infrastructure Setup
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Status: ✅ COMPLETE (100%)
+
+Tasks:
+  ✅ Docker setup (PostgreSQL, Redis)
+  ✅ Git repository initialized
+  ✅ Project structure created (Clean Architecture)
+  ✅ .gitignore, README.md
+  ✅ Initial commit & push
+
+Deliverables:
+  • docker-compose.yml
+  • Project folder structure
+  • Development environment ready
+
+Time: ~2 hours
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📅 Day 2 (2025-10-24): Backend Foundation
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Status: ✅ COMPLETE (100%)
+
+Tasks:
+  ✅ FastAPI application structure
+  ✅ Database models (SQLAlchemy)
+  ✅ Core services (logging, config)
+  ✅ API endpoints skeleton
+  ✅ Alembic migrations
+
+Deliverables:
+  • app/main.py
+  • app/infrastructure/database/
+  • app/core/
+  • alembic/
+
+Code: ~800 lines
+Time: ~3 hours
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📅 Day 3 (2025-10-24): Data Collection
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Status: ✅ COMPLETE (100%)
+
+Tasks:
+  ✅ Alpha Vantage service (GLD ETF)
+  ✅ GLD → Gold spot conversion (factor: 10.89)
+  ✅ Real gold price scraper (Kitco)
+  ✅ News RSS feed service
+  ✅ Data collection & storage
+
+Deliverables:
+  • 5,267 price candles (21 years!)
+  • GLD conversion service
+  • News scraping setup
+
+Data:
+  • gold_price_facts: 10,597 records
+  • Date range: 2004-11-18 → 2025-10-24
+
+Code: ~1,200 lines
+Time: ~4 hours
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📅 Day 4 (2025-10-24): Sentiment Analysis
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Status: ✅ COMPLETE (100%)
+
+Tasks:
+  ✅ FinBERT integration
+  ✅ Sentiment analysis service
+  ✅ News analysis automation
+  ✅ 16 initial news analyzed
+
+Deliverables:
+  • sentiment_analysis_service.py
+  • FinBERT model loaded (ProsusAI/finbert)
+  • Sentiment scores in database
+
+Results:
+  • Model: FinBERT (financial sentiment)
+  • News analyzed: 16
+  • Accuracy: High confidence
+  • Sentiment distribution: 62% positive
+
+Code: ~500 lines
+Time: ~3 hours
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📅 Day 5 Part 1 (2025-10-25): Technical Indicators & Visualization
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Status: ✅ COMPLETE (100%)
+
+Tasks:
+  ✅ Technical indicators service (RSI, MACD, BB, MAs)
+  ✅ Visualization script (Plotly)
+  ✅ 3 interactive HTML charts
+  ✅ Interactive dashboard
+  ✅ Correlation analysis (93.2%!)
+
+Deliverables:
+  • technical_indicators_service.py
+  • visualize_analysis.py
+  • dashboard.html
+  • sentiment_analysis.html
+  • technical_indicators.html
+  • combined_analysis.html
+
+Key Findings:
+  • Sentiment-Price correlation: 93.2% ⭐
+  • 21 years of data visualized
+  • All indicators calculated
+
+Code: ~1,100 lines
+Time: ~4 hours
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📅 Day 5 Part 2 (2025-10-25): LSTM Model & News Collection
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Status: ⏳ IN PROGRESS (75%)
+
+Tasks:
+  ✅ Feature engineering service (42 features)
+  ✅ LSTM model service
+  ✅ Model v1 training (R²=0.053)
+  ✅ NewsAPI integration
+  ✅ 477 news collected & analyzed
+  ✅ Improved training script (v2)
+  ⏳ Model v2 training (in progress)
+
+Deliverables:
+  • feature_engineering_service.py
+  • lstm_model_service.py
+  • newsapi_service.py
+  • train_lstm_model.py
+  • train_lstm_improved.py
+  • 461 new news articles
+
+Results:
+  Model v1:
+    • R²: 0.053
+    • RMSE: $566.94
+    • MAE: $417.48
+    • MAPE: 15.76%
+  
+  News Database:
+    • Total: 477 articles (16 → 477)
+    • Coverage: 30 days
+    • Sentiment: All analyzed
+
+  Model v2 (training):
+    • Sequence: 90 days (vs 60)
+    • LSTM: [256,128,64] (vs [128,64,32])
+    • Expected R²: 0.3-0.5
+
+Code: ~1,500 lines
+Time: ~2 hours (+ training time)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📅 Day 6 (2025-10-26): PLANNED - Model Evaluation & Prediction API
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Status: 📅 PLANNED (0%)
+
+Planned Tasks:
+  📅 Complete model v2 training
+  📅 Compare v1 vs v2 performance
+  📅 Create prediction API endpoints
+  📅 Real-time prediction service
+  📅 Model performance visualization
+  📅 API documentation (Swagger)
+
+Target Deliverables:
+  • API endpoint: /api/v1/predict
+  • API endpoint: /api/v1/predictions/history
+  • Model comparison charts
+  • Performance metrics dashboard
+  • Prediction confidence scores
+
+Expected Results:
+  • Working prediction API
+  • Model v2 R² > 0.3
+  • API response time < 500ms
+
+Estimated Time: 4-5 hours
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📅 Day 7 (2025-10-27): PLANNED - Real-time Updates & WebSocket
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Status: 📅 PLANNED (0%)
+
+Planned Tasks:
+  📅 WebSocket integration
+  📅 Real-time price updates
+  📅 Auto news fetching (schedule)
+  📅 Live sentiment analysis
+  📅 Notification system
+
+Target Deliverables:
+  • WebSocket endpoint
+  • Background tasks (Celery/APScheduler)
+  • Real-time dashboard updates
+  • Push notifications
+
+Estimated Time: 5-6 hours
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📅 Day 8 (2025-10-28): PLANNED - React Frontend
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Status: 📅 PLANNED (0%)
+
+Planned Tasks:
+  📅 Create React App
+  📅 Dashboard components
+  📅 Chart integration (Recharts/D3)
+  📅 API client setup
+  📅 State management (Redux)
+  📅 Responsive design
+
+Target Deliverables:
+  • frontend/ directory
+  • Interactive charts
+  • Live predictions view
+  • Historical data view
+
+Estimated Time: 6-8 hours
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📅 Days 9-10 (2025-10-29/30): PLANNED - Deployment & Testing
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Status: 📅 PLANNED (0%)
+
+Planned Tasks:
+  📅 Docker deployment setup
+  📅 CI/CD pipeline (GitHub Actions)
+  📅 Unit tests
+  📅 Integration tests
+  📅 Performance testing
+  📅 Documentation finalization
+
+Target Deliverables:
+  • Dockerfile (production)
+  • docker-compose.prod.yml
+  • GitHub Actions workflow
+  • Test coverage > 80%
+  • Complete API docs
+
+Estimated Time: 8-10 hours
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+---
+
+### 📈 Progress by Category
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    PROGRESS BY CATEGORY                      │
+├─────────────────────────────────────────────────────────────┤
+│                                                               │
+│  Infrastructure:      ████████████████████  100% ✅          │
+│  Backend API:         ███████████████░░░░░   75% ⏳          │
+│  Data Collection:     ████████████████████  100% ✅          │
+│  ML/AI (Sentiment):   ████████████████████  100% ✅          │
+│  ML/AI (Prediction):  ██████████░░░░░░░░░░   50% ⏳          │
+│  Visualization:       ████████████████████  100% ✅          │
+│  Real-time Features:  ░░░░░░░░░░░░░░░░░░░░    0% 📅          │
+│  Frontend:            ░░░░░░░░░░░░░░░░░░░░    0% 📅          │
+│  Testing:             ░░░░░░░░░░░░░░░░░░░░    0% 📅          │
+│  Deployment:          ░░░░░░░░░░░░░░░░░░░░    0% 📅          │
+│                                                               │
+│  Overall Progress:    ████████████░░░░░░░░   55% ⏳          │
+│                                                               │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 📊 Code Statistics
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                    CODE STATISTICS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Total Lines of Code:    ~5,100 lines
+Total Files:            ~35 files
+Total Commits:          ~15 commits
+
+By Language:
+  Python:               4,800 lines (94%)
+  SQL:                  150 lines   (3%)
+  YAML:                 100 lines   (2%)
+  HTML:                 50 lines    (1%)
+
+By Component:
+  Services:             2,500 lines (49%)
+  Models:               800 lines   (16%)
+  Scripts:              700 lines   (14%)
+  API:                  600 lines   (12%)
+  Utils:                500 lines   (9%)
+
+Documentation:
+  Markdown files:       15 files
+  Total doc lines:      ~8,000 lines
+  
+Time Invested:
+  Development:          ~18 hours
+  Documentation:        ~4 hours
+  Total:                ~22 hours
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+---
+
+### 🎯 Current Status (2025-10-25 16:48:08 UTC)
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                    CURRENT STATUS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔄 Active Task:
+   LSTM Model v2 Training
+   Started: 2025-10-25 16:27:20 UTC
+   Status: In Progress (Epoch ~20/100)
+   ETA: 30-40 minutes
+
+✅ Completed Today:
+   • 461 news articles collected
+   • NewsAPI integration
+   • Feature engineering (42 features)
+   • LSTM model v1 trained
+   • Improved training script
+
+📊 Database Status:
+   • News: 477 articles (30 days coverage)
+   • Prices: 5,267 candles (21 years)
+   • All sentiment analyzed
+
+🎯 Next Immediate Steps:
+   1. Wait for model v2 training
+   2. Evaluate v2 performance
+   3. Compare v1 vs v2
+   4. Start Day 6 tasks
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+---
+
+### 🗺️ Roadmap Summary
+
+```
+Phase 1: Foundation (Days 1-3) ✅ COMPLETE
+├─ Infrastructure
+├─ Backend skeleton
+└─ Data collection
+
+Phase 2: Intelligence (Days 4-5) ⏳ 75% COMPLETE
+├─ Sentiment analysis ✅
+├─ Technical indicators ✅
+├─ LSTM predictions ⏳ (training)
+└─ Visualization ✅
+
+Phase 3: API & Real-time (Days 6-7) 📅 PLANNED
+├─ Prediction API
+├─ WebSocket
+└─ Background tasks
+
+Phase 4: Frontend (Day 8) 📅 PLANNED
+├─ React dashboard
+├─ Interactive charts
+└─ User interface
+
+Phase 5: Production (Days 9-10) 📅 PLANNED
+├─ Testing
+├─ CI/CD
+└─ Deployment
+
+Phase 6: Advanced Features (Days 11+) 📅 FUTURE
+├─ Multiple models ensemble
+├─ Advanced features (Dollar, Oil, VIX)
+├─ Trading signals
+└─ Mobile app
+```
+

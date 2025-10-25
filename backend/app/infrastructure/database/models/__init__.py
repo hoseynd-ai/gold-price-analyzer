@@ -12,8 +12,10 @@ License: MIT
 
 from app.infrastructure.database.models.gold_price_fact import GoldPriceFact
 from app.infrastructure.database.models.news_event import NewsEvent
+from app.infrastructure.database.models.dollar_index import DollarIndexPrice
 
 __all__ = [
     "GoldPriceFact",
     "NewsEvent",
+    "DollarIndexPrice",
 ]

@@ -10,6 +10,7 @@ Gold Price Analyzer - Complete Analysis Visualization
 
 Author: Hoseyn Doulabi (@hoseynd-ai)
 Created: 2025-10-25
+Updated: 2025-10-25 14:47:43 UTC
 """
 
 import sys
@@ -40,7 +41,7 @@ def load_data_from_database():
     
     engine = create_engine(DATABASE_URL)
     
-    # Load gold prices
+    # Load gold prices - FIXED QUERY!
     query_prices = """
     SELECT 
         timestamp,
@@ -51,7 +52,7 @@ def load_data_from_database():
         volume
     FROM gold_price_facts
     WHERE timeframe = 'daily'
-        AND source = 'converted'
+        AND source = 'alpha_vantage_gold_converted'
     ORDER BY timestamp ASC;
     """
     
@@ -74,7 +75,7 @@ def load_data_from_database():
     df_news = pd.read_sql(query_news, engine)
     df_news['published_at'] = pd.to_datetime(df_news['published_at'])
     
-    print(f"✅ Loaded {len(df_prices)} price records")
+    print(f"✅ Loaded {len(df_prices):,} price records")
     print(f"✅ Loaded {len(df_news)} news articles")
     
     return df_prices, df_news
@@ -116,21 +117,22 @@ def create_sentiment_chart(df_news):
     
     for label in ['positive', 'negative', 'neutral']:
         mask = df_news['sentiment_label'] == label
-        fig.add_trace(
-            go.Scatter(
-                x=df_news[mask]['published_at'],
-                y=df_news[mask]['sentiment_score'],
-                mode='markers+lines',
-                name=label.capitalize(),
-                marker=dict(
-                    size=10,
-                    color=colors[label],
-                    line=dict(width=1, color='white')
+        if mask.sum() > 0:
+            fig.add_trace(
+                go.Scatter(
+                    x=df_news[mask]['published_at'],
+                    y=df_news[mask]['sentiment_score'],
+                    mode='markers+lines',
+                    name=label.capitalize(),
+                    marker=dict(
+                        size=10,
+                        color=colors[label],
+                        line=dict(width=1, color='white')
+                    ),
+                    line=dict(width=2, color=colors[label])
                 ),
-                line=dict(width=2, color=colors[label])
-            ),
-            row=1, col=1
-        )
+                row=1, col=1
+            )
     
     # Add zero line
     fig.add_hline(y=0, line_dash="dash", line_color="gray", row=1, col=1)
@@ -141,7 +143,7 @@ def create_sentiment_chart(df_news):
         go.Bar(
             x=sentiment_counts.index,
             y=sentiment_counts.values,
-            marker_color=[colors[label] for label in sentiment_counts.index],
+            marker_color=[colors.get(label, '#3498db') for label in sentiment_counts.index],
             text=sentiment_counts.values,
             textposition='auto'
         ),
@@ -322,7 +324,7 @@ def create_technical_indicators_chart(df):
     
     # Update layout
     fig.update_layout(
-        title_text="📊 Technical Analysis Dashboard",
+        title_text="📊 Technical Analysis Dashboard - 21 Years of Gold Data (2004-2025)",
         title_font_size=18,
         height=1200,
         showlegend=True,
@@ -372,7 +374,7 @@ def create_combined_analysis(df_prices, df_news):
         rows=2, cols=1,
         subplot_titles=(
             '💰 Gold Price & News Sentiment',
-            '📊 Sentiment vs Price Change Correlation'
+            '📊 Sentiment vs Price Correlation'
         ),
         specs=[[{"secondary_y": True}], [{"secondary_y": False}]],
         row_heights=[0.6, 0.4],
@@ -391,17 +393,20 @@ def create_combined_analysis(df_prices, df_news):
         row=1, col=1, secondary_y=False
     )
     
-    fig.add_trace(
-        go.Scatter(
-            x=df_merged['date'],
-            y=df_merged['avg_sentiment'],
-            mode='lines+markers',
-            name='Avg Sentiment',
-            line=dict(color='blue', width=2),
-            marker=dict(size=8)
-        ),
-        row=1, col=1, secondary_y=True
-    )
+    # Only plot sentiment where it exists
+    df_with_sentiment = df_merged[df_merged['avg_sentiment'].notna()]
+    if len(df_with_sentiment) > 0:
+        fig.add_trace(
+            go.Scatter(
+                x=df_with_sentiment['date'],
+                y=df_with_sentiment['avg_sentiment'],
+                mode='lines+markers',
+                name='Avg Sentiment',
+                line=dict(color='blue', width=2),
+                marker=dict(size=8)
+            ),
+            row=1, col=1, secondary_y=True
+        )
     
     # Row 2: Scatter plot
     df_merged_clean = df_merged.dropna()
@@ -491,6 +496,11 @@ def main():
         # Load data
         df_prices, df_news = load_data_from_database()
         
+        if len(df_prices) == 0:
+            print("\n⚠️  No price data found!")
+            print("Please run data collection first.")
+            return
+        
         # Calculate indicators
         df_with_indicators = calculate_technical_indicators(df_prices)
         
@@ -504,8 +514,13 @@ def main():
         print("="*60)
         print("\n📁 Generated files:")
         print("  1. sentiment_analysis.html")
-        print("  2. technical_indicators.html")
+        print("  2. technical_indicators.html (21 years: 2004-2025)")
         print("  3. combined_analysis.html")
+        print("\n📊 Data summary:")
+        print(f"  • Price records: {len(df_prices):,} candles")
+        print(f"  • Date range: {df_prices['timestamp'].min().date()} to {df_prices['timestamp'].max().date()}")
+        print(f"  • Years of data: {(df_prices['timestamp'].max() - df_prices['timestamp'].min()).days / 365:.1f} years")
+        print(f"  • News articles: {len(df_news)} with sentiment")
         print("\n💡 Open these files in your browser to view the charts!")
         print("="*60 + "\n")
         
